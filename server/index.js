@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const User = require('./models/Users');
 
+
 // Create an Express app
 const app = express();
 app.use(express.json());
@@ -45,3 +46,5 @@ app.post('/api/login', async (req, res) => {
       res.status(500).json({ error: error.message });
     }
   });
+
+
