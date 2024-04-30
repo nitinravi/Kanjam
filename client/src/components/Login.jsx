@@ -7,27 +7,30 @@ import { useNavigate } from "react-router-dom";
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [togglePasswordVisibility, setTogglePasswordVisibility] = useState(false);
 
   const navigate = useNavigate();
 
-  const handleLogin = () => {
-    // Your login logic here
-    axios
-      .post("http://localhost:5000/api/login", {
-        username,
-        password,
-      })
-      .then((response) => {
-        console.log(response.data);
-        // Redirect to home page
-        navigate("/home");
-      })
-
-      .catch((error) => {
-        console.error("There was an error!", error);
-      });
+  const handleLogin = (e) => {
+    console.log('Username:', username);
+    console.log('Password:', password);
+    e.preventDefault();
+    axios.post('http://localhost:5000/api/login', {
+      name,
+      username,
+      password
+    })
+    .then(response => {
+      console.log(response.data);
+      alert('Login successful');
+      navigate('/home');
+    })
+    .catch(error => {
+      console.error('There was an error!', error);
+      alert('Invalid username or password');
+    });
   };
 
   return (
