@@ -32,15 +32,19 @@ app.post('/api/signup', async (req, res) => {
 });
 
 app.post('/api/login', async (req, res) => {
-    User.findOne({ username: req.body.username, password: req.body.password })
-        .then((user) => {
-            if (user) {
-                res.json(user);
-            } else {
-                res.status(400).json({ message: 'Invalid credentials' });
-            }
-        })
-        .catch((error) => {
-            res.status(400).json({ message: error.message });
-        })
+    try {
+        const user = await User.findOne({ username: req.body.username, password: req.body.password });
+        
+        if (user) {
+            res.json(user);
+            return; // Add return statement here
+        } else {
+            res.status(400).json({ message: 'Invalid credentials' });
+            // No need for alert here, it's a server-side code
+            return; // Add return statement here
+        }
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+        return; // Add return statement here
+    }
 });
