@@ -39,9 +39,19 @@ function Home() {
     }
   };
 
+  const goPrice = () => {
+    window.location.href = '/price';
+  }
+
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-8">Product Search</h1>
+      
+      <div className="flex justify-between items-center">
+  <h1 className="text-3xl font-bold mb-8">Product Search</h1>
+  <button onClick={goPrice} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4">
+    Search other platforms
+  </button>
+</div>
       <div className="mb-4">
         <input
           type="text"

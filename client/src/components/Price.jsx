@@ -26,50 +26,59 @@ const Price = () => {
     }
   };
 
+  const goToHomePage = () => {
+    window.location.href = '/home';
+  }
+
   return (
     <div className="container mx-auto px-4 py-8">
-      <form onSubmit={handleSearch} className="mb-4">
-        <input
-          type="text"
-          placeholder="Enter search term..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="border border-gray-300 rounded py-2 px-4 mr-2"
-        />
-        <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-          Search
-        </button>
-      </form>
-      {searchResults.length > 0 && (
-        <div>
-          {searchResults.map((result, index) => (
-            <div key={index} className="border border-gray-300 p-4 mb-4">
-              
-              <div className="mt-4">
-                <h3 className="text-lg font-semibold mb-2">Search Results:</h3>
-                <ul>
-                  {result.content.search_results.map((item, idx) => (
-                    <li key={idx} className="mb-4">
-                      <div className="flex items-center">
-                        <img src={item.img_url} alt={item.name} className="w-24 h-24 mr-4" />
-                        <div>
-                          <p className="text-gray-800">{item.name}</p>
-                          <p className="text-gray-600">Price: {item.min_price} {item.currency}</p>
-                          <p className="text-gray-600">Review Count: {item.review_count}</p>
-                          <p className="text-gray-600">Review Rating: {item.review_rating}</p>
-                          <p className="text-gray-600">Product Link: <a href={item.url} target="_blank" rel="noopener noreferrer" className="text-blue-500">View Product</a></p>
-                        </div>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          ))}
+      <div className="flex justify-between items-center">
+  <h1 className="text-3xl font-bold mb-8">Search for a Product across platforms</h1>
+  <button onClick={goToHomePage} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded float-right mb-4">
+    Go to Home
+  </button>
+</div>
+  <form onSubmit={handleSearch} className="mb-4">
+    <input
+      type="text"
+      placeholder="Search for product..."
+      value={searchTerm}
+      onChange={(e) => setSearchTerm(e.target.value)}
+      className="border border-gray-300 rounded py-2 px-4 mr-2 w-1/2 align-middle"
+    />
+    <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+      Search
+    </button>
+  </form>
+  {searchResults.length > 0 && (
+    <div>
+      {searchResults.map((result, index) => (
+        <div key={index} className="border border-gray-300 p-4 mb-4">
+          <div className="mt-4">
+            <h3 className="text-lg font-semibold mb-2">Search Results:</h3>
+            <ul>
+              {result.content.search_results.map((item, idx) => (
+                <li key={idx} className="mb-4">
+                  <div className="flex items-center">
+                    <img src={item.img_url} alt={item.name} className="w-24 h-24 mr-4" />
+                    <div>
+                      <p className="text-gray-800">{item.name}</p>
+                      <p className="text-gray-600">Price: {item.min_price} {item.currency}</p>
+                      <p className="text-gray-600">Review Count: {item.review_count}</p>
+                      <p className="text-gray-600">Review Rating: {item.review_rating}</p>
+                      <p className="text-gray-600">Product Link: <a href={item.url} target="_blank" rel="noopener noreferrer" className="text-blue-500">View Product</a></p>
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
-      )}
-      {error && <p className="text-red-500">{error}</p>}
+      ))}
     </div>
+  )}
+  {error && <p className="text-red-500">{error}</p>}
+</div>
   );
 };
 
