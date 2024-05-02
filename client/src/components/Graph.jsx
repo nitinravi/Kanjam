@@ -1,9 +1,19 @@
-import React from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Area } from 'recharts';
+import React, { useState } from 'react';
+import ProductCard2 from './ProductCard2';
+import PopupGraph from './PopupGraph';
 
 const SimpleGraph = () => {
-  // Example price history data for iPhone 15 Pro Max for the past month
-  const priceHistoryData = [
+  const [selectedProduct, setSelectedProduct] = useState(null);
+
+  const handleProductClick = (product) => {
+    setSelectedProduct(product);
+  };
+
+  const handleClosePopup = () => {
+    setSelectedProduct(null);
+  };
+
+  const priceHistoryData1 = [
     { date: '2024-04-01', price: 1200 },
     { date: '2024-04-02', price: 1180 },
     { date: '2024-04-03', price: 1160 },
@@ -36,27 +46,307 @@ const SimpleGraph = () => {
     { date: '2024-04-30', price: 1275 },
   ];
 
+    const priceHistoryData2 = [
+    { date: '2024-05-01', price: 980 },
+    { date: '2024-05-02', price: 950 },
+    { date: '2024-05-03', price: 930 },
+    { date: '2024-05-04', price: 920 },
+    { date: '2024-05-05', price: 940 },
+    { date: '2024-05-06', price: 960 },
+    { date: '2024-05-07', price: 990 },
+    { date: '2024-05-08', price: 980 },
+    { date: '2024-05-09', price: 1000 },
+    { date: '2024-05-10', price: 1020 },
+    { date: '2024-05-11', price: 1050 },
+    { date: '2024-05-12', price: 1080 },
+    { date: '2024-05-13', price: 1100 },
+    { date: '2024-05-14', price: 1075 },
+    { date: '2024-05-15', price: 1050 },
+    { date: '2024-05-16', price: 1035 },
+    { date: '2024-05-17', price: 1020 },
+    { date: '2024-05-18', price: 1005 },
+    { date: '2024-05-19', price: 1020 },
+    { date: '2024-05-20', price: 1030 },
+    { date: '2024-05-21', price: 1040 },
+    { date: '2024-05-22', price: 1050 },
+    { date: '2024-05-23', price: 1060 },
+    { date: '2024-05-24', price: 1080 },
+    { date: '2024-05-25', price: 1100 },
+    { date: '2024-05-26', price: 1120 },
+    { date: '2024-05-27', price: 1140 },
+    { date: '2024-05-28', price: 1160 },
+    { date: '2024-05-29', price: 1180 },
+    { date: '2024-05-30', price: 1200 },
+];
+
+const priceHistoryData3 = [
+  { date: '2024-05-01', price: 21800 },
+  { date: '2024-05-02', price: 21750 },
+  { date: '2024-05-03', price: 21700 },
+  { date: '2024-05-04', price: 21650 },
+  { date: '2024-05-05', price: 21700 },
+  { date: '2024-05-06', price: 21750 },
+  { date: '2024-05-07', price: 21800 },
+  { date: '2024-05-08', price: 21750 },
+  { date: '2024-05-09', price: 21700 },
+  { date: '2024-05-10', price: 21650 },
+  { date: '2024-05-11', price: 21600 },
+  { date: '2024-05-12', price: 21650 },
+  { date: '2024-05-13', price: 21700 },
+  { date: '2024-05-14', price: 21750 },
+  { date: '2024-05-15', price: 21800 },
+  { date: '2024-05-16', price: 21850 },
+  { date: '2024-05-17', price: 21900 },
+  { date: '2024-05-18', price: 21950 },
+  { date: '2024-05-19', price: 22000 },
+  { date: '2024-05-20', price: 21950 },
+  { date: '2024-05-21', price: 21900 },
+  { date: '2024-05-22', price: 21850 },
+  { date: '2024-05-23', price: 21800 },
+  { date: '2024-05-24', price: 21750 },
+  { date: '2024-05-25', price: 21700 },
+  { date: '2024-05-26', price: 21650 },
+  { date: '2024-05-27', price: 21600 },
+  { date: '2024-05-28', price: 21650 },
+  { date: '2024-05-29', price: 21700 },
+  { date: '2024-05-30', price: 21750 },
+];
+const priceHistoryData4 = [
+  { date: '2024-05-01', price: 480 },
+  { date: '2024-05-02', price: 470 },
+  { date: '2024-05-03', price: 460 },
+  { date: '2024-05-04', price: 455 },
+  { date: '2024-05-05', price: 465 },
+  { date: '2024-05-06', price: 475 },
+  { date: '2024-05-07', price: 490 },
+  { date: '2024-05-08', price: 480 },
+  { date: '2024-05-09', price: 500 },
+  { date: '2024-05-10', price: 510 },
+  { date: '2024-05-11', price: 520 },
+  { date: '2024-05-12', price: 535 },
+  { date: '2024-05-13', price: 550 },
+  { date: '2024-05-14', price: 545 },
+  { date: '2024-05-15', price: 530 },
+  { date: '2024-05-16', price: 525 },
+  { date: '2024-05-17', price: 515 },
+  { date: '2024-05-18', price: 505 },
+  { date: '2024-05-19', price: 520 },
+  { date: '2024-05-20', price: 510 },
+  { date: '2024-05-21', price: 505 },
+  { date: '2024-05-22', price: 515 },
+  { date: '2024-05-23', price: 520 },
+  { date: '2024-05-24', price: 530 },
+  { date: '2024-05-25', price: 540 },
+  { date: '2024-05-26', price: 550 },
+  { date: '2024-05-27', price: 565 },
+  { date: '2024-05-28', price: 580 },
+  { date: '2024-05-29', price: 590 },
+  { date: '2024-05-30', price: 600 },
+];
+
+const priceHistoryData5 = [
+  { date: '2024-05-01', price: 1680 },
+  { date: '2024-05-02', price: 1660 },
+  { date: '2024-05-03', price: 1640 },
+  { date: '2024-05-04', price: 1635 },
+  { date: '2024-05-05', price: 1650 },
+  { date: '2024-05-06', price: 1665 },
+  { date: '2024-05-07', price: 1690 },
+  { date: '2024-05-08', price: 1685 },
+  { date: '2024-05-09', price: 1700 },
+  { date: '2024-05-10', price: 1710 },
+  { date: '2024-05-11', price: 1720 },
+  { date: '2024-05-12', price: 1735 },
+  { date: '2024-05-13', price: 1750 },
+  { date: '2024-05-14', price: 1745 },
+  { date: '2024-05-15', price: 1730 },
+  { date: '2024-05-16', price: 1725 },
+  { date: '2024-05-17', price: 1715 },
+  { date: '2024-05-18', price: 1705 },
+  { date: '2024-05-19', price: 1720 },
+  { date: '2024-05-20', price: 1710 },
+  { date: '2024-05-21', price: 1705 },
+  { date: '2024-05-22', price: 1715 },
+  { date: '2024-05-23', price: 1720 },
+  { date: '2024-05-24', price: 1730 },
+  { date: '2024-05-25', price: 1740 },
+  { date: '2024-05-26', price: 1750 },
+  { date: '2024-05-27', price: 1765 },
+  { date: '2024-05-28', price: 1780 },
+  { date: '2024-05-29', price: 1790 },
+  { date: '2024-05-30', price: 1800 },
+];
+const priceHistoryData6 = [
+  { date: '2024-05-01', price: 9800 },
+  { date: '2024-05-02', price: 9700 },
+  { date: '2024-05-03', price: 9600 },
+  { date: '2024-05-04', price: 9550 },
+  { date: '2024-05-05', price: 9650 },
+  { date: '2024-05-06', price: 9750 },
+  { date: '2024-05-07', price: 9900 },
+  { date: '2024-05-08', price: 9800 },
+  { date: '2024-05-09', price: 10000 },
+  { date: '2024-05-10', price: 10100 },
+  { date: '2024-05-11', price: 10200 },
+  { date: '2024-05-12', price: 10350 },
+  { date: '2024-05-13', price: 10500 },
+  { date: '2024-05-14', price: 10450 },
+  { date: '2024-05-15', price: 10300 },
+  { date: '2024-05-16', price: 10250 },
+  { date: '2024-05-17', price: 10150 },
+  { date: '2024-05-18', price: 10050 },
+  { date: '2024-05-19', price: 10200 },
+  { date: '2024-05-20', price: 10100 },
+  { date: '2024-05-21', price: 10050 },
+  { date: '2024-05-22', price: 10150 },
+  { date: '2024-05-23', price: 10200 },
+  { date: '2024-05-24', price: 10300 },
+  { date: '2024-05-25', price: 10400 },
+  { date: '2024-05-26', price: 10500 },
+  { date: '2024-05-27', price: 10650 },
+  { date: '2024-05-28', price: 10800 },
+  { date: '2024-05-29', price: 10900 },
+  { date: '2024-05-30', price: 11000 },
+];
+
+const priceHistoryData7 = [
+  { date: '2024-05-01', price: 430 },
+  { date: '2024-05-02', price: 420 },
+  { date: '2024-05-03', price: 410 },
+  { date: '2024-05-04', price: 405 },
+  { date: '2024-05-05', price: 415 },
+  { date: '2024-05-06', price: 425 },
+  { date: '2024-05-07', price: 440 },
+  { date: '2024-05-08', price: 430 },
+  { date: '2024-05-09', price: 450 },
+  { date: '2024-05-10', price: 460 },
+  { date: '2024-05-11', price: 470 },
+  { date: '2024-05-12', price: 485 },
+  { date: '2024-05-13', price: 500 },
+  { date: '2024-05-14', price: 495 },
+  { date: '2024-05-15', price: 480 },
+  { date: '2024-05-16', price: 475 },
+  { date: '2024-05-17', price: 465 },
+  { date: '2024-05-18', price: 455 },
+  { date: '2024-05-19', price: 470 },
+  { date: '2024-05-20', price: 460 },
+  { date: '2024-05-21', price: 455 },
+  { date: '2024-05-22', price: 465 },
+  { date: '2024-05-23', price: 470 },
+  { date: '2024-05-24', price: 480 },
+  { date: '2024-05-25', price: 490 },
+  { date: '2024-05-26', price: 500 },
+  { date: '2024-05-27', price: 515 },
+  { date: '2024-05-28', price: 530 },
+  { date: '2024-05-29', price: 540 },
+  { date: '2024-05-30', price: 550 },
+];
+const priceHistoryData8 = [
+  { date: '2024-05-01', price: 13800 },
+  { date: '2024-05-02', price: 13700 },
+  { date: '2024-05-03', price: 13600 },
+  { date: '2024-05-04', price: 13550 },
+  { date: '2024-05-05', price: 13650 },
+  { date: '2024-05-06', price: 13750 },
+  { date: '2024-05-07', price: 13900 },
+  { date: '2024-05-08', price: 13850 },
+  { date: '2024-05-09', price: 14000 },
+  { date: '2024-05-10', price: 14100 },
+  { date: '2024-05-11', price: 14200 },
+  { date: '2024-05-12', price: 14350 },
+  { date: '2024-05-13', price: 14500 },
+  { date: '2024-05-14', price: 14450 },
+  { date: '2024-05-15', price: 14300 },
+  { date: '2024-05-16', price: 14250 },
+  { date: '2024-05-17', price: 14150 },
+  { date: '2024-05-18', price: 14050 },
+  { date: '2024-05-19', price: 14200 },
+  { date: '2024-05-20', price: 14100 },
+  { date: '2024-05-21', price: 14050 },
+  { date: '2024-05-22', price: 14150 },
+  { date: '2024-05-23', price: 14200 },
+  { date: '2024-05-24', price: 14300 },
+  { date: '2024-05-25', price: 14400 },
+  { date: '2024-05-26', price: 14500 },
+  { date: '2024-05-27', price: 14650 },
+  { date: '2024-05-28', price: 14800 },
+  { date: '2024-05-29', price: 14900 },
+  { date: '2024-05-30', price: 15000 },
+];
+
+  // Sample product data with price history data
+  const products = [
+    {
+      id: 1,
+      name: 'Product 1',
+      price: 100,
+      image: 'https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/MT233?wid=1144&hei=1144&fmt=jpeg&qlt=90&.v=1693248327138',
+      priceHistoryData: priceHistoryData1,
+    },
+    // Add more products with price history data as needed
+    {
+      id: 2,
+      name: 'Product 2',
+      price: 200,
+      image: 'https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/MT233?wid=1144&hei=1144&fmt=jpeg&qlt=90&.v=1693248327138',
+      priceHistoryData: priceHistoryData2,
+    },
+    {
+      id: 3,
+      name: 'Product 3',
+      price: 300,
+      image: 'https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/MT233?wid=1144&hei=1144&fmt=jpeg&qlt=90&.v=1693248327138',
+      priceHistoryData: priceHistoryData3,
+    },
+    {
+      id: 4,
+      name: 'Product 4',
+      price: 400,
+      image: 'https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/MT233?wid=1144&hei=1144&fmt=jpeg&qlt=90&.v=1693248327138',
+      priceHistoryData: priceHistoryData4,
+    },
+    {
+      id: 5,
+      name: 'Product 5',
+      price: 500,
+      image: 'https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/MT233?wid=1144&hei=1144&fmt=jpeg&qlt=90&.v=1693248327138',
+      priceHistoryData: priceHistoryData5,
+    },
+    {
+      id: 6,
+      name: 'Product 6',
+      price: 600,
+      image: 'https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/MT233?wid=1144&hei=1144&fmt=jpeg&qlt=90&.v=1693248327138',
+      priceHistoryData: priceHistoryData6,
+    },
+    {
+      id: 7,
+      name: 'Product 7',
+      price: 700,
+      image: 'https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/MT233?wid=1144&hei=1144&fmt=jpeg&qlt=90&.v=1693248327138',
+      priceHistoryData: priceHistoryData7,
+    },
+    {
+      id: 8,
+      name: 'Product 8',
+      price: 800,
+      image: 'https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/MT233?wid=1144&hei=1144&fmt=jpeg&qlt=90&.v=1693248327138',
+      priceHistoryData: priceHistoryData8,
+    },
+  ];
+
   return (
-    <ResponsiveContainer width="100%" height={400}>
-      <LineChart
-        data={priceHistoryData}
-        margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-      >
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="date" />
-        <YAxis />
-        <Tooltip />
-        <Legend />
-        <defs>
-          <linearGradient id="priceGradient" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8}/>
-            <stop offset="95%" stopColor="#ffffff" stopOpacity={0}/>
-          </linearGradient>
-        </defs>
-        <Area type="monotone" dataKey="price" stroke="#8884d8" fill="url(#priceGradient)" />
-        <Line type="monotone" dataKey="price" stroke="#8884d8" strokeWidth={2} dot={{ stroke: '#8884d8', strokeWidth: 2, r: 4 }} />
-      </LineChart>
-    </ResponsiveContainer>
+    <div className="max-w-6xl mx-auto px-4 py-8">
+      <h1 className="text-4xl font-bold mb-8">Product Catalog</h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {products.map((product) => (
+          <ProductCard2 key={product.id} product={product} onClick={handleProductClick} />
+        ))}
+      </div>
+      {selectedProduct && (
+        <PopupGraph product={selectedProduct} onClose={handleClosePopup} />
+      )}
+    </div>
   );
 };
 

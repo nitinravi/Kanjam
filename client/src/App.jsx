@@ -5,6 +5,8 @@ import Login from './components/Login';
 import Signup from './components/Signup';
 import Price from './components/Price';
 import Graph from './components/Graph';
+import ProductCard2 from './components/ProductCard2';
+import PopupGraph from './components/PopupGraph';
 
 const App = () => {
   return (
@@ -15,6 +17,9 @@ const App = () => {
         <Route path="/home" element={<Home />} />
         <Route path="/price" element={<Price />} />
         <Route path="/graph" element={<Graph />} />
+        <Route path="/product" element={<ProductCard2 />} />
+        <Route path="/popup" element={<PopupGraph />} />
+
       </Routes>
     </BrowserRouter>
   );
