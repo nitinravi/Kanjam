@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Price Prediction Chart</title>
+    <!-- Include Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+       body {
+            font-family: 'Helvetica Neue', sans-serif;
+            background-color: #ffffff;
+            color: #333333;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        canvas {
+            max-width: 600px;
+            box-shadow: 0px 10px 30px rgba(0,0,0,0.1);
+        }
+        #predictionOptions {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        #predictionOptions select {
+            padding: 10px;
+            margin-right: 10px;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 20% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            border-radius: 8px;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="priceChart"></canvas>
+    <div id="predictionOptions">
+        <select id="timePeriod">
+            <option value="1-2">1-2 days</option>
+            <option value="7">1 week</option>
+            <option value="30">1 month</option>
+        </select>
+        <button onclick="updateChart()">Apply</button>
+    </div>
+    <!-- Modal -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <p id="modalText"></p>
+        </div>
+    </div>
+    <script>
+         const priceHistoryData = [
+  { date: '2024-05-01', price: 21800 },
+  { date: '2024-05-02', price: 21750 },
+  { date: '2024-05-03', price: 21700 },
+  { date: '2024-05-04', price: 21650 },
+  { date: '2024-05-05', price: 21700 },
+  { date: '2024-05-06', price: 21750 },
+  { date: '2024-05-07', price: 21800 },
+  { date: '2024-05-08', price: 21750 },
+  { date: '2024-05-09', price: 21700 },
+  { date: '2024-05-10', price: 21650 },
+  { date: '2024-05-11', price: 21600 },
+  { date: '2024-05-12', price: 21650 },
+  { date: '2024-05-13', price: 21700 },
+  { date: '2024-05-14', price: 21750 },
+  { date: '2024-05-15', price: 21800 },
+  { date: '2024-05-16', price: 21850 },
+  { date: '2024-05-17', price: 21900 },
+  { date: '2024-05-18', price: 21950 },
+  { date: '2024-05-19', price: 22000 },
+  { date: '2024-05-20', price: 21950 },
+  { date: '2024-05-21', price: 21900 },
+  { date: '2024-05-22', price: 21850 },
+  { date: '2024-05-23', price: 21800 },
+  { date: '2024-05-24', price: 21750 },
+  { date: '2024-05-25', price: 21700 },
+  { date: '2024-05-26', price: 21650 },
+  { date: '2024-05-27', price: 21600 },
+  { date: '2024-05-28', price: 21650 },
+  { date: '2024-05-29', price: 21700 },
+  { date: '2024-05-30', price: 21750 },
+];
+
+        // Exponential Regression function
+        function exponentialRegression(x, y) {
+            const n = x.length;
+            let sumX = 0, sumY = 0, sumXY = 0, sumXX = 0;
+
+            for (let i = 0; i < n; i++) {
+                sumX += x[i];
+                sumY += Math.log(y[i]);
+                sumXY += x[i] * Math.log(y[i]);
+                sumXX += x[i] * x[i];
+            }
+
+            const b = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
+            const a = (sumY - b * sumX) / n;
+
+            return [Math.exp(a), b];
+        }
+
+        // Linear Regression function
+        function linearRegression(x, y) {
+            const n = x.length;
+            let sumX = 0, sumY = 0, sumXY = 0, sumXX = 0;
+
+            for (let i = 0; i < n; i++) {
+                sumX += x[i];
+                sumY += y[i];
+                sumXY += x[i] * y[i];
+                sumXX += x[i] * x[i];
+            }
+
+            const b = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
+            const a = (sumY - b * sumX) / n;
+
+            return [a, b];
+        }
+
+        // Polynomial Regression function
+        function polynomialRegression(x, y, degree) {
+            const n = x.length;
+            let xSum = new Array(2 * degree + 1).fill(0);
+            let ySum = new Array(degree + 1).fill(0);
+            let results = new Array(degree + 1).fill(0);
+
+            for (let i = 0; i < n; i++) {
+                for (let j = 0; j < 2 * degree + 1; j++) {
+                    xSum[j] += Math.pow(x[i], j);
+                }
+                for (let j = 0; j < degree + 1; j++) {
+                    ySum[j] += y[i] * Math.pow(x[i], j);
+                }
+            }
+
+            let matrix = [];
+            for (let i = 0; i <= degree; i++) {
+                let row = [];
+                for (let j = 0; j <= degree; j++) {
+                    row.push(xSum[i + j]);
+                }
+                matrix.push(row);
+            }
+
+            for (let i = 0; i <= degree; i++) {
+                let row = [];
+                for (let j = 0; j <= degree; j++) {
+                    row.push(matrix[i][j]);
+                }
+                row.push(ySum[i]);
+                matrix[i] = row;
+            }
+
+            for (let i = 0; i < degree; i++) {
+                for (let k = i + 1; k <= degree; k++) {
+                    let coeff = matrix[k][i] / matrix[i][i];
+                    for (let j = 0; j <= degree + 1; j++) {
+                        matrix[k][j] -= coeff * matrix[i][j];
+                    }
+                }
+            }
+
+            results[degree] = matrix[degree][degree + 1] / matrix[degree][degree];
+            for (let i = degree - 1; i >= 0; i--) {
+                let sum = 0;
+                for (let j = i + 1; j <= degree; j++) {
+                    sum += matrix[i][j] * results[j];
+                }
+                results[i] = (matrix[i][degree + 1] - sum) / matrix[i][i];
+            }
+
+            return results;
+        }
+
+        // Predict future prices using polynomial regression
+        function predictPolynomialRegression(coefficients, futureDates) {
+            const futurePrices = [];
+            for (let i = 0; i < futureDates.length; i++) {
+                let prediction = 0;
+                for (let j = 0; j < coefficients.length; j++) {
+                    prediction += coefficients[j] * Math.pow(futureDates[i].getTime(), j);
+                }
+                futurePrices.push(prediction);
+            }
+            return futurePrices;
+        }
+
+        // Predict future prices using linear regression
+        function predictLinearRegression(coefficients, futureDates) {
+            const futurePrices = [];
+            for (let i = 0; i < futureDates.length; i++) {
+                const prediction = coefficients[0] + coefficients[1] * futureDates[i].getTime();
+                futurePrices.push(prediction);
+            }
+            return futurePrices;
+        }
+
+        // Predict future prices using exponential regression
+        function predictExponentialRegression(coefficients, futureDates) {
+            const futurePrices = [];
+            for (let i = 0; i < futureDates.length; i++) {
+                const prediction = coefficients[0] * Math.exp(coefficients[1] * futureDates[i].getTime());
+                futurePrices.push(prediction);
+            }
+            return futurePrices;
+        }
+
+        // Calculate average of three arrays
+        function calculateAverage(array1, array2, array3) {
+            const average = [];
+            for (let i = 0; i < array1.length; i++) {
+                average.push((array1[i] + array2[i] + array3[i]) / 3);
+            }
+            return average;
+        }
+
+        // Advise buying decision
+        function adviseBuyingDecision(selectedValue) {
+            const lastDateIndex = priceHistoryData.length - 1;
+            const startingPrice = priceHistoryData[lastDateIndex - selectedValue + 1].price;
+            const currentDatePrice = priceHistoryData[lastDateIndex].price;
+
+            let advice = document.getElementById("modalText");
+
+            if (startingPrice < currentDatePrice) {
+                advice.innerHTML = "It will be better buying the product now.";
+            } else if (startingPrice > currentDatePrice) {
+                advice.innerHTML = "You may consider waiting to buy the product.";
+            } else {
+                advice.innerHTML = "No notable changes.";
+            }
+
+            // Show modal
+            const modal = document.getElementById("myModal");
+            modal.style.display = "block";
+        }
+
+        function closeModal() {
+            const modal = document.getElementById("myModal");
+            modal.style.display = "none";
+        }
+
+        // Prepare data
+        const lastDate = new Date(priceHistoryData[priceHistoryData.length - 1].date);
+        const futureDates = [];
+        const futurePrices = [];
+        for (let i = 1; i <= 30; i++) {
+            const nextDate = new Date(lastDate);
+            nextDate.setDate(nextDate.getDate() + i);
+            futureDates.push(nextDate);
+        }
+
+        const dates = priceHistoryData.map(data => new Date(data.date));
+        const prices = priceHistoryData.map(data => data.price);
+
+        // Perform regressions
+        const datesInMilliseconds = dates.map(date => date.getTime());
+        const linearCoefficients = linearRegression(datesInMilliseconds, prices);
+        const exponentialCoefficients = exponentialRegression(datesInMilliseconds, prices);
+        const polynomialCoefficients = polynomialRegression(datesInMilliseconds, prices, 2); // Use polynomial of degree 2
+
+        // Predict future prices
+        const linearFuturePrices = predictLinearRegression(linearCoefficients, futureDates);
+        const exponentialFuturePrices = predictExponentialRegression(exponentialCoefficients, futureDates);
+        const polynomialFuturePrices = predictPolynomialRegression(polynomialCoefficients, futureDates);
+
+        // Calculate average predictions
+        const averageFuturePrices = calculateAverage(linearFuturePrices, exponentialFuturePrices, polynomialFuturePrices);
+
+        const ctx = document.getElementById('priceChart').getContext('2d');
+        const priceChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [...dates, ...futureDates].map(date => date.toLocaleDateString()),
+                datasets: [{
+                    label: 'Price Prediction',
+                    data: [...prices, ...averageFuturePrices],
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: false,
+                            suggestedMax: Math.max(...prices, ...averageFuturePrices) + 200, // Adjust maximum value dynamically
+                            stepSize: 100 // Increase the interval between ticks
+                        }
+                    }],
+                    xAxes: [{
+                        type: 'time',
+                        time: {
+                            unit: 'day'
+                        }
+                    }]
+                }
+            }
+        });
+
+        function updateChart() {
+            const selectedValue = parseInt(document.getElementById('timePeriod').value);
+            const newData = getPriceData(selectedValue);
+            updateChartData(newData);
+
+            adviseBuyingDecision(selectedValue);
+        }
+
+        function getPriceData(selectedValue) {
+            const today = new Date();
+            const lastDate = new Date(priceHistoryData[priceHistoryData.length - 1].date);
+            const futureDates = [];
+            const futurePrices = [];
+            
+            for (let i = 1; i <= selectedValue; i++) {
+                const nextDate = new Date(lastDate);
+                nextDate.setDate(nextDate.getDate() + i);
+                futureDates.push(nextDate);
+            }
+            
+            const dates = priceHistoryData.map(data => new Date(data.date));
+            const prices = priceHistoryData.map(data => data.price);
+            
+            const datesInMilliseconds = dates.map(date => date.getTime());
+            const linearCoefficients = linearRegression(datesInMilliseconds, prices);
+            const exponentialCoefficients = exponentialRegression(datesInMilliseconds, prices);
+            const polynomialCoefficients = polynomialRegression(datesInMilliseconds, prices, 2);
+            
+            const linearFuturePrices = predictLinearRegression(linearCoefficients, futureDates);
+            const exponentialFuturePrices = predictExponentialRegression(exponentialCoefficients, futureDates);
+            const polynomialFuturePrices = predictPolynomialRegression(polynomialCoefficients, futureDates);
+            
+            const averageFuturePrices = calculateAverage(linearFuturePrices, exponentialFuturePrices, polynomialFuturePrices);
+            
+            return [...prices, ...averageFuturePrices];
+        }
+
+        function updateChartData(newData) {
+            priceChart.data.datasets[0].data = newData;
+            priceChart.update();
+        }
+    </script>
+</body>
+</html>
