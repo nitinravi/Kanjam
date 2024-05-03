@@ -79,38 +79,39 @@ const Login = () => {
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                 />
                 <button
-                  type="button"
-                  className="absolute inset-y-0 right-0 px-3 py-2 focus:outline-none"
-                  onClick={togglePasswordVisibility}
-                >
-                  {showPassword ? (
-                    <svg
-                      className="h-5 w-5 text-gray-500"
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zM9 5a1 1 0 012 0v4a1 1 0 11-2 0V5zM8 11a1 1 0 00-1 1v1a1 1 0 102 0v-1a1 1 0 00-1-1z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  ) : (
-                    <svg
-                      className="h-5 w-5 text-gray-500"
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm2-7a2 2 0 11-4 0 2 2 0 014 0z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  )}
-                </button>
+  type="button"
+  className="absolute inset-y-0 right-0 px-3 py-2 focus:outline-none"
+  onClick={() => setShowPassword(!showPassword)}
+>
+  {showPassword ? (
+    <svg
+      className="h-5 w-5 text-gray-500"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 20 20"
+      fill="currentColor"
+    >
+      <path
+        fillRule="evenodd"
+        d="M10 18a8 8 0 100-16 8 8 0 000 16zM9 5a1 1 0 012 0v4a1 1 0 11-2 0V5zM8 11a1 1 0 00-1 1v1a1 1 0 102 0v-1a1 1 0 00-1-1z"
+        clipRule="evenodd"
+      />
+    </svg>
+  ) : (
+    <svg
+      className="h-5 w-5 text-gray-500"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 20 20"
+      fill="currentColor"
+    >
+      <path
+        fillRule="evenodd"
+        d="M10 18a8 8 0 100-16 8 8 0 000 16zm2-7a2 2 0 11-4 0 2 2 0 014 0z"
+        clipRule="evenodd"
+      />
+    </svg>
+  )}
+</button>
+
               </div>
             </div>
             <div className="flex items-center justify-center">

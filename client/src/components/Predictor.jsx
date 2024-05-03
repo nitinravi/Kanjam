@@ -120,7 +120,7 @@ const Predictor = () => {
     };
   
     return (
-        <div className="container">
+        <div className="containerr">
             <h2>Price Prediction Chart</h2>
             <div className="chart-container">
                 <LineChart width={800} height={400} data={priceHistoryData.concat(linearFuturePrices)} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
@@ -135,7 +135,6 @@ const Predictor = () => {
             </div>
 
             <div className="prediction-info">
-                <h3>Predictions</h3>
                 <div className="prediction-item">
                     <span>Next Day Prediction:</span>
                     <span>{nextDayPrediction}</span>
@@ -163,8 +162,8 @@ const Predictor = () => {
                 <div className="modal">
                     <div className="modal-content">
                         <span className="close" onClick={hideSuggestion}>&times;</span>
-                        <h3>Suggestion:</h3>
-                        <p>{suggestion}</p>
+                        <p className="pt-10 font-medium text-xl">We suggest you to</p>
+                        <p className='pb-10 font-bold text-6xl'>{suggestion}</p>
                     </div>
                 </div>
             )}

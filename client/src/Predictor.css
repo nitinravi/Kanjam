@@ -1,4 +1,4 @@
-.container {
+.containerr {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -19,7 +19,7 @@
 .prediction-item {
     display: flex;
     justify-content: space-between;
-    width: 250px;
+    width: 350px;
     margin-bottom: 5px;
 }
 

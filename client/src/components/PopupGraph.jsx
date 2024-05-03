@@ -6,6 +6,10 @@ const PopupGraph = ({ product, onClose }) => {
     onClose();
   };
 
+  const nav = () => {
+    window.location.href = '/predictor';
+  }
+
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-75">
       <div className="max-w-lg w-full p-6 bg-white rounded-lg shadow-lg">
@@ -39,7 +43,11 @@ const PopupGraph = ({ product, onClose }) => {
               <Line type="monotone" dataKey="price" stroke="#ff0000" strokeWidth={2} dot={{ stroke: '#ff0000', strokeWidth: 2, r: 4 }} />
             </LineChart>
           </ResponsiveContainer>
+          
         </div>
+        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4" onClick={nav}>
+          See Price Prediction
+        </button>
       </div>
     </div>
   );
